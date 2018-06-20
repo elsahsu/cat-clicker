@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+ 	 <head>
+ 	 	<meta charset="utf-8">
+ 	 	<title>Cat Clicker 0.1</title>
+	</head>
+	<body>
+		<img id="cat-pic" src="cat.jpg" />
+		<h1> Clicks: <span id="click-count">None</span>
+	</body>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+let click_count = 0;
+$('#cat-pic').click(function(e) {
+	click_count += 1;
+	console.log(click_count);
+	$('#click-count').html(click_count);
+});
+	</script>
+</html>
