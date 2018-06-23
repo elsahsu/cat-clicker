@@ -16,32 +16,30 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script>
 
-function Cat(index, name) {
-	this.index = index;
+function Cat(name, image_url) {
 	this.name = name;
+	this.image_url = image_url;
 	this.clicks = 0;
 }
 
 Cat.prototype.clicked = function() {
 	this.clicks += 1;
 	console.log(this.name + ' clicked. Count:' + this.clicks);
-	// $('#click-count').text(this.clicks);
 }
 
 Cat.prototype.clickName = function() {
 	console.log(this.name + ' name clicked.');
-	// $(`#cat-${this.index}-clicks`).html(this.clicks);
 	octopus.selectCat(this);
 }
 
 let model = {
 	init: function() {
 		this.cats = [
-			new Cat(0, 'Onesey'),
-			new Cat(1, 'Twosey'),
-			new Cat(2, 'Threesey'),
-			new Cat(3, 'Foursey'),
-			new Cat(4, 'Fivesey')
+			new Cat('Onesey', 'cat_1.jpg'),
+			new Cat('Twosey', 'cat_2.jpg'),
+			new Cat('Threesey', 'cat_3.jpg'),
+			new Cat('Foursey', 'cat_4.jpg'),
+			new Cat('Fivesey', 'cat_5.jpg')
 		];
 		this.selected_cat = this.cats[0];
 	}
@@ -91,10 +89,9 @@ let view = {
 			console.log(cat);
 			let item_elem = document.createElement('div');
 			let link_elem = document.createElement('a');
-			link_elem.setAttribute('href', '#' + cat.index);
+			link_elem.setAttribute('href', '#' + cat.name);
 			link_elem.textContent = cat.name;
 			link_elem.addEventListener('click', function() {
-			// console.log(cat.name + ' clicked');
 				cat.clickName();
 			});
 			item_elem.append(link_elem);
@@ -103,11 +100,11 @@ let view = {
 	},
 
 	renderCatDisplay: function() {
-		let selected_cat = octopus.getSelectedCat();
-		let image_file = "cat_" + selected_cat.index + ".jpg";
-		$('#display-name').html(selected_cat.name);
-		$('#display-img').attr('src', image_file);
-		$('#click-count').text(selected_cat.clicks);
+		let cat = octopus.getSelectedCat();
+		// let image_file = "cat_" + selected_cat.index + ".jpg";
+		$('#display-name').html(cat.name);
+		$('#display-img').attr('src', cat.image_url);
+		$('#click-count').text(cat.clicks);
 	}
 };
 
