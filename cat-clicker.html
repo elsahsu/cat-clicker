@@ -2,7 +2,7 @@
 <html>
  	 <head>
  	 	<meta charset="utf-8">
-		<title>Cat Clicker 0.3</title>
+		<title>Cat Clicker 0.4</title>
 	</head>
 	<body>
 		<div id="cat-list"> </div>
@@ -25,56 +25,93 @@ function Cat(index, name) {
 Cat.prototype.clicked = function() {
 	this.clicks += 1;
 	console.log(this.name + ' clicked. Count:' + this.clicks);
-	$('#click-count').text(this.clicks);
+	// $('#click-count').text(this.clicks);
 }
 
 Cat.prototype.clickName = function() {
 	console.log(this.name + ' name clicked.');
 	// $(`#cat-${this.index}-clicks`).html(this.clicks);
-	selected_cat = this;
-	let image_file = "cat_" + this.index + ".jpg";
-	$('#display-name').html(this.name);
-	$('#display-img').attr('src', image_file);
-	$('#click-count').text(this.clicks);
+	octopus.selectCat(this);
 }
 
-let cats = [
-	new Cat(0, 'Onesey'),
-	new Cat(1, 'Twosey'),
-	new Cat(2, 'Threesey'),
-	new Cat(3, 'Foursey'),
-	new Cat(4, 'Fivesey'),
-];
+let model = {
+	init: function() {
+		this.cats = [
+			new Cat(0, 'Onesey'),
+			new Cat(1, 'Twosey'),
+			new Cat(2, 'Threesey'),
+			new Cat(3, 'Foursey'),
+			new Cat(4, 'Fivesey')
+		];
+		this.selected_cat = null;
+	}
+};
 
-let selected_cat = null;
+let octopus = {
+	init: function() {
+		model.init();
+		view.init();
+	},
 
-// console.log(cats);
+	getCats: function() {
+		return model.cats;
+	},
 
-cats.forEach(function(cat, index) {
-	console.log(cat);
-	let grid = $('#cat-list');
-	// let image_id = "img-cat-" + cat.index;
-	// let image_file = "cat_" + cat.index + ".jpg";
-	var list_elem = document.createElement('div');
-	var link_elem = document.createElement('a');
-	link_elem.setAttribute('href', '#' + cat.index);
-	link_elem.textContent = cat.name;
-	link_elem.addEventListener('click', function() {
-		// console.log(cat.name + ' clicked');
-		cat.clickName();
-	});
-	list_elem.append(link_elem);
-	grid.append(list_elem);
-	// grid.append(`<div> <a href="#${cat.index}"> ${cat.name} </a> </div>`);
+	getSelectedCat: function() {
+		return model.selected_cat;
+	},
 
-	// grid.append(`<img id="${image_id}" src="${image_file}">`);
-	// grid.append(`<h1> Clicks: <span id="cat-${index}-clicks"> None </h1>`);	
-});
+	selectCat: function(cat) {
+		model.selected_cat = cat;
+		view.renderCatDisplay();
+	},
 
-$('#display-img').click(function() {
-	console.log('Image clicked');
-	selected_cat.clicked();
-});
+	imageClicked: function() {
+		model.selected_cat.clicked();
+		view.renderCatDisplay();
+	}
+};
+
+let view = {
+	init: function() {
+		this.renderCatList();
+
+		$('#display-img').click(function() {
+			console.log('Image clicked');
+			octopus.imageClicked();
+		});
+	},
+
+	renderCatList: function() {
+		let cats = octopus.getCats();
+		console.log('renderCatList: ' + cats);
+		let list_elem = $('#cat-list');
+		list_elem.html('');
+		cats.forEach(function(cat, index) {
+			console.log(cat);
+			let item_elem = document.createElement('div');
+			let link_elem = document.createElement('a');
+			link_elem.setAttribute('href', '#' + cat.index);
+			link_elem.textContent = cat.name;
+			link_elem.addEventListener('click', function() {
+			// console.log(cat.name + ' clicked');
+				cat.clickName();
+			});
+			item_elem.append(link_elem);
+			list_elem.append(item_elem);
+		});
+	},
+
+	renderCatDisplay: function() {
+		let selected_cat = octopus.getSelectedCat();
+		let image_file = "cat_" + selected_cat.index + ".jpg";
+		$('#display-name').html(selected_cat.name);
+		$('#display-img').attr('src', image_file);
+		$('#click-count').text(selected_cat.clicks);
+	}
+};
+
+octopus.init();
 
 	</script>
 </html>
