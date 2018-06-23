@@ -24,6 +24,7 @@ let model = {
 			new Cat('Fivesey', 'cat_5.jpg')
 		];
 		this.selected_cat = this.cats[0];
+		this.is_admin_area_shown = false;
 	}
 };
 
@@ -41,6 +42,10 @@ let octopus = {
 		return model.selected_cat;
 	},
 
+	isAdminAreaShown: function() {
+		return model.is_admin_area_shown;
+	},
+
 	selectCat: function(cat) {
 		model.selected_cat = cat;
 		view.renderCatDisplay();
@@ -49,24 +54,42 @@ let octopus = {
 	imageClicked: function() {
 		model.selected_cat.clicked();
 		view.renderCatDisplay();
+	},
+
+	toggleAdminArea: function() {
+		if (model.is_admin_area_shown) {
+			model.is_admin_area_shown = false;
+		} else {
+			model.is_admin_area_shown = true;
+		}
+		view.renderAdminArea();
 	}
 };
 
 let view = {
 	init: function() {
-		$('#display-img').click(function() {
+		this.img = $('#display-img');
+		this.cat_list = $('#cat-list');
+		this.admin_area = $('#admin-area');
+		this.img.click(function() {
 			console.log('Image clicked');
 			octopus.imageClicked();
 		});
+		$('#button-admin').click(function() {
+			console.log('Admin button clicked');
+			octopus.toggleAdminArea();
+		});
 		this.renderCatList();
 		this.renderCatDisplay();
+		this.renderAdminArea();
 	},
 
 	renderCatList: function() {
 		let cats = octopus.getCats();
+		let cat_list = this.cat_list
 		console.log('renderCatList: ' + cats);
-		let list_elem = $('#cat-list');
-		list_elem.html('');
+		// let list_elem = $('#cat-list');
+		cat_list.html('');
 		cats.forEach(function(cat, index) {
 			console.log(cat);
 			let item_elem = document.createElement('div');
@@ -77,7 +100,7 @@ let view = {
 				cat.clickName();
 			});
 			item_elem.append(link_elem);
-			list_elem.append(item_elem);
+			cat_list.append(item_elem);
 		});
 	},
 
@@ -87,6 +110,14 @@ let view = {
 		$('#display-name').html(cat.name);
 		$('#display-img').attr('src', cat.image_url);
 		$('#click-count').text(cat.clicks);
+	},
+
+	renderAdminArea: function() {
+		if (octopus.isAdminAreaShown()) {
+			this.admin_area.show();
+		} else {
+			this.admin_area.hide();
+		}
 	}
 };
 
