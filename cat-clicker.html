@@ -43,7 +43,7 @@ let model = {
 			new Cat(3, 'Foursey'),
 			new Cat(4, 'Fivesey')
 		];
-		this.selected_cat = null;
+		this.selected_cat = this.cats[0];
 	}
 };
 
@@ -74,12 +74,12 @@ let octopus = {
 
 let view = {
 	init: function() {
-		this.renderCatList();
-
 		$('#display-img').click(function() {
 			console.log('Image clicked');
 			octopus.imageClicked();
 		});
+		this.renderCatList();
+		this.renderCatDisplay();
 	},
 
 	renderCatList: function() {
