@@ -1,21 +1,3 @@
-<!doctype html>
-<html>
- 	 <head>
- 	 	<meta charset="utf-8">
-		<title>Cat Clicker 0.4</title>
-	</head>
-	<body>
-		<div id="cat-list"> </div>
-		<div id="cat-display">
-			<h1 id="display-name"></h1>
-			<img id="display-img">
-			<div> Clicks: <span id="click-count">None</span></div>
-		</div>
-	</body>
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script>
-
 function Cat(name, image_url) {
 	this.name = name;
 	this.image_url = image_url;
@@ -109,6 +91,3 @@ let view = {
 };
 
 octopus.init();
-
-	</script>
-</html>
