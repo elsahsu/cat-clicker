@@ -63,6 +63,21 @@ let octopus = {
 			model.is_admin_area_shown = true;
 		}
 		view.renderAdminArea();
+	},
+
+	hideAdminArea: function() {
+		model.is_admin_area_shown = false;
+		view.renderAdminArea();
+	},
+
+	updateCat: function(name, url, clicked) {
+		model.selected_cat.name = name;
+		model.selected_cat.image_url = url;
+		model.selected_cat.clicks = clicked;
+		console.log(`updateCat: ${name}, ${url}, ${clicked}`);
+		// console.log(model.cats);
+		view.renderCatDisplay();
+		view.renderCatList();
 	}
 };
 
@@ -78,6 +93,19 @@ let view = {
 		$('#button-admin').click(function() {
 			console.log('Admin button clicked');
 			octopus.toggleAdminArea();
+		});
+		$('#button-save').click(function() {
+			let cat_name = $('#input-cat-name').val();
+			let cat_url= $('#input-cat-url').val();
+			let cat_count= parseInt($('#input-cat-count').val());
+			console.log('Save button clicked. Saving cat name:' + cat_name);
+			octopus.updateCat(cat_name, cat_url, cat_count);
+			octopus.hideAdminArea();
+		});
+		$('#button-cancel').click(function() {
+			console.log('Cancel button clicked');
+			 // If can click button, area is visible, so this should hide it
+			octopus.hideAdminArea();
 		});
 		this.renderCatList();
 		this.renderCatDisplay();
@@ -115,9 +143,17 @@ let view = {
 	renderAdminArea: function() {
 		if (octopus.isAdminAreaShown()) {
 			this.admin_area.show();
+			this.renderAdminForm();
 		} else {
 			this.admin_area.hide();
 		}
+	},
+
+	renderAdminForm: function() {
+		let cat = octopus.getSelectedCat();
+		$('#input-cat-name').attr('value', cat.name);
+		$('#input-cat-url').attr('value', cat.image_url);
+		$('#input-cat-count').attr('value', cat.clicks);
 	}
 };
 
